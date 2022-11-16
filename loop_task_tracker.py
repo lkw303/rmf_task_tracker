@@ -46,7 +46,7 @@ def main(argv=sys.argv):
                                 get_task_list=task_list_getter,
                                 callback=callback)
     task_tracker.start()
-    while(not task_tracker.task_completed):
+    while(not task_tracker.task_completed and not task_tracker.task_failed):
         time.sleep(0.1)
         print('waiting for task')
     task_tracker.join()
