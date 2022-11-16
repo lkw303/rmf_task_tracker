@@ -30,7 +30,7 @@ def main(argv=sys.argv):
                         help="port number",
                         default=8000)
     args = parser.parse_args(argv[1:])
-    task_requestor = PostTaskRequester(args.pickup, 
+    task_requestor = DeliveryTaskRequester(args.pickup, 
                                        args.dropoff, 
                                        args.dispenser, 
                                        args.ingestor,

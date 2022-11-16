@@ -1,5 +1,6 @@
 import time
 import json
+import threading
 from .get_task import GetTaskList
 
 class TaskTracker():
@@ -19,7 +20,7 @@ class TaskTracker():
         self.callback()
         return
 
-    def wait_for_task(self):
+    def update_status(self):
         task_list_json = json.loads(self.get_task_list.get_task_list().text)
         for task in task_list_json:
             if task['task_id'] == self.task_id:
@@ -42,12 +43,20 @@ class TaskTracker():
         self.task_id = resp["task_id"]
         return err_msg
     
-    def start(self):
-        if (self.execute_task() != ""):
-            return
+    def update_status_loop(self):
         while (not self.task_completed):
-            self.wait_for_task()
+            self.update_status()
             time.sleep(0.2)
         self.completed_task_cb()
         print("Completed and exiting loop!")
+    
+    def start(self):
+        if (self.execute_task() != ""):
+            return
+        update_thread = threading.Thread(target=self.update_status_loop)
+        self.update_thread = update_thread
+        self.update_thread.start()
         return
+
+    def join(self):
+        self.update_thread.join()

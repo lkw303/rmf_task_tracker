@@ -1,5 +1,6 @@
 import argparse
 import sys
+import time
 from task_tracker.loop_task_requester import LoopTaskRequester
 from task_tracker.get_task import GetTaskList
 from task_tracker.task_tracker import TaskTracker
@@ -45,6 +46,11 @@ def main(argv=sys.argv):
                                 get_task_list=task_list_getter,
                                 callback=callback)
     task_tracker.start()
+    while(not task_tracker.task_completed):
+        time.sleep(0.1)
+        print('waiting for task')
+    task_tracker.join()
+
 if __name__ == '__main__':
     main(argv=sys.argv)
 
