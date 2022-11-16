@@ -5,15 +5,18 @@ from .get_task import GetTaskList
 class TaskTracker():
     def __init__(self,
                 task_requester,
-                get_task_list: GetTaskList):
+                get_task_list: GetTaskList,
+                callback):
         self.task_requester = task_requester
         self.get_task_list = get_task_list
         self.task_id = None
         self.task_completed = False
+        self.callback = callback
     
     def completed_task_cb(self):
         # do something
         print("Executing complete task callback")
+        self.callback()
         return
 
     def wait_for_task(self):
@@ -37,12 +40,14 @@ class TaskTracker():
             print("Error dispatching task!")
             return err_msg
         self.task_id = resp["task_id"]
+        return err_msg
     
     def start(self):
-        if (self.execute_task() == ""):
+        if (self.execute_task() != ""):
             return
         while (not self.task_completed):
             self.wait_for_task()
             time.sleep(0.2)
+        self.completed_task_cb()
         print("Completed and exiting loop!")
         return

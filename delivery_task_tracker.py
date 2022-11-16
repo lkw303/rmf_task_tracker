@@ -42,8 +42,13 @@ def main(argv=sys.argv):
                                        args.start_time)
 
     task_list_getter = GetTaskList(args.ip_address,args.port)
+
+    def callback():
+        print("end loop task callback")
+    
     task_tracker = TaskTracker(task_requester=task_requestor,
-                                get_task_list=task_list_getter)
+                                get_task_list=task_list_getter,
+                                callback=callback)
     task_tracker.start()
 if __name__ == '__main__':
     main(argv=sys.argv)
