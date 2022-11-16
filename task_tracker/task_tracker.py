@@ -11,6 +11,7 @@ class TaskTracker():
         self.get_task_list = get_task_list
         self.task_id = None
         self.task_completed = False
+        self.task_failed = False
         self.callback = callback
     
     def completed_task_cb(self):
@@ -26,6 +27,10 @@ class TaskTracker():
                 if task['state'] == 'Completed':
                     print(f"Task of task id {self.task_id} completed!")
                     self.task_completed = True
+                    return
+                elif task['state'] == 'Failed':
+                    print(f"Task of task id {self.task_id} failed!")
+                    self.task_failed = True
                     return
                 else:
                     print(f"Waiting for task of task id: {self.task_id} to complete")
@@ -45,9 +50,10 @@ class TaskTracker():
     def start(self):
         if (self.execute_task() != ""):
             return
-        while (not self.task_completed):
+        while (not self.task_completed and not self.task_failed):
             self.wait_for_task()
             time.sleep(0.2)
-        self.completed_task_cb()
-        print("Completed and exiting loop!")
+        if self.task_completed:
+            self.completed_task_cb()
+        print("exiting loop!")
         return
