@@ -60,7 +60,7 @@ def main(argv=sys.argv):
     parser.add_argument('-pt', '--port',
                         type=str,
                         help="port number",
-                        default=8000)
+                        default=8083)
     args = parser.parse_args(argv[1:])
     task_requestor = DeliveryTaskRequester(args.pickup, 
                                        args.dropoff, 

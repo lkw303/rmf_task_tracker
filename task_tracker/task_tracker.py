@@ -47,13 +47,20 @@ class TaskTracker():
         self.task_id = resp["task_id"]
         return err_msg
     
+    # TODO: Return true or false depending if the task failed
     def start(self):
-        if (self.execute_task() != ""):
-            return
+        err_msg = self.execute_task()
+        if (err_msg!= ""):
+            print(f"Error message: {err_msg}")
+            return False
         while (not self.task_completed and not self.task_failed):
             self.wait_for_task()
             time.sleep(0.2)
         if self.task_completed:
             self.completed_task_cb()
-        print("exiting loop!")
-        return
+            print("Task completed and exiting loop!")
+            return True
+        elif self.task_failed:
+            print("Task failed and exiting loop!")
+            return False
+        
