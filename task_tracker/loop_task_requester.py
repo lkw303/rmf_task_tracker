@@ -12,7 +12,7 @@ class LoopTaskRequester():
         self.start_time = start_time
         self.ip_address = ip_address
         self.port = port
-        self.route = '/submit_task'
+        self.route = '/dispatch_task'
 
         self.delivery_task_json = {}
         self.delivery_task_json['task_type'] = 'Loop'
